@@ -444,8 +444,8 @@ def run_demo(model: nn.Module, data_dir: Path, num_samples: int, runs_dir: Path,
 def main():
     """Main pipeline function."""
     parser = argparse.ArgumentParser(description="DeepFish counting pipeline")
-    parser.add_argument('--data-dir', type=str, default="~/data/DeepFish", 
-                      help="Dataset directory")
+    parser.add_argument('--data-dir', type=str, default=".", 
+                      help="Dataset directory (default: current project folder)")
     parser.add_argument('--model-dir', type=str, default="~/models/deepfish_counter",
                       help="Model directory")
     parser.add_argument('--runs-dir', type=str, default="~/runs/deepfish_demo",
@@ -461,7 +461,8 @@ def main():
     args = parser.parse_args()
     
     # Expand paths
-    data_dir = Path(args.data_dir).expanduser()
+    project_dir = Path(os.path.dirname(os.path.abspath(__file__)))
+    data_dir = project_dir if args.data_dir == "." else Path(args.data_dir).expanduser()
     model_dir = Path(args.model_dir).expanduser()
     runs_dir = Path(args.runs_dir).expanduser()
     model_path = model_dir / "best.pt"
